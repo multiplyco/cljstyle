@@ -166,7 +166,7 @@
   (cond
     ;; 100 ms
     (< elapsed 100)
-    (format "%.2f ms" (double elapsed))
+    (String/format java.util.Locale/US "%.2f ms" (to-array [(double elapsed)]))
 
     ;; 1 second
     (< elapsed 1000)
@@ -174,7 +174,7 @@
 
     ;; 1 minute
     (< elapsed (* 60 1000))
-    (format "%.2f sec" (/ elapsed 1000.0))
+    (String/format java.util.Locale/US "%.2f sec" (to-array [(/ elapsed 1000.0)]))
 
     ;; any longer
     :else
@@ -197,7 +197,7 @@
                   "subrule" (name rule-key)
                   "elapsed" (duration-str (/ duration 1e6))
                   "percent" (if (pos? total)
-                              (format "%.1f%%" (* 100.0 (/ duration total)))
+                              (String/format java.util.Locale/US "%.1f%%" (to-array [(* 100.0 (/ duration total))]))
                               "--")})))))
 
 
@@ -223,16 +223,16 @@
                 (assoc :durations durations))]
     (log (pr-str stats))
     (when (or (option :report) (option :verbose))
-      (printf "Checked %d of %d files in %s (%.1f fps)\n"
+      (printf "Checked %d of %d files in %s (%s fps)\n"
               total-processed
               total-files
               (if elapsed
                 (duration-str elapsed)
                 "some amount of time")
-              (* 1e3 (/ total-processed elapsed)))
-      (printf "Checked %.1f KB of source files (%.1f KBps)\n"
-              (/ total-size 1024.0)
-              (* 1e3 (/ total-size 1024 elapsed)))
+              (String/format java.util.Locale/US "%.1f" (to-array [(* 1e3 (/ total-processed elapsed))])))
+      (printf "Checked %s KB of source files (%s KBps)\n"
+              (String/format java.util.Locale/US "%.1f" (to-array [(/ total-size 1024.0)]))
+              (String/format java.util.Locale/US "%.1f" (to-array [(* 1e3 (/ total-size 1024 elapsed))])))
       (doseq [[type-key file-count] (sort-by val (comp - compare) (:files stats))]
         (printf "%6d %s\n" file-count (name type-key)))
       (when (pos? diff-lines)
