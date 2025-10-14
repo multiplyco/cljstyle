@@ -14,6 +14,53 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   [#104](https://github.com/greglook/cljstyle/issues/104)
 
 
+## [0.18.0] - 2025-01-14
+
+This release adds support for aligning values in maps and binding forms,
+inspired by and adapted from a cljfmt contribution (PR #370). Both features
+are disabled by default to maintain backward compatibility.
+
+### Added
+- A new `:alignment` formatting rule with comprehensive support for aligning
+  values in maps and binding forms for improved readability.
+- `:maps?` option aligns map values to the longest key in each alignment group.
+  Groups are separated by blank lines (double newlines).
+  ```clojure
+  ;; Before
+  {:foo 1
+   :barbaz 2}
+
+  ;; After (with :maps? true)
+  {:foo    1
+   :barbaz 2}
+  ```
+- `:forms?` option aligns binding vectors in configured forms like `let`,
+  `for`, `doseq`, and `loop`.
+  ```clojure
+  ;; Before
+  (let [foo 1
+        barbaz 2]
+    (+ foo barbaz))
+
+  ;; After (with :forms? true)
+  (let [foo    1
+        barbaz 2]
+    (+ foo barbaz))
+  ```
+- `:aligns` configuration map specifies which forms and at which child indices
+  alignment should be applied. Default configuration includes: `let`, `for`,
+  `doseq`, `loop`, `binding`, `with-open`, `with-redefs`, and
+  `with-local-vars` (all at index 0).
+- New `resources/cljstyle/aligns.clj` resource file containing default
+  alignment rules.
+- New `src/cljstyle/format/align.clj` namespace implementing the alignment
+  logic using zipper-based AST manipulation.
+- Comprehensive test suite in `test/cljstyle/format/align_test.clj` covering
+  maps, forms, group separation, and edge cases.
+- Updated documentation in `doc/configuration.md` with detailed examples and
+  configuration options.
+
+
 ## [0.17.642] - 2024-12-08
 
 ### Changed

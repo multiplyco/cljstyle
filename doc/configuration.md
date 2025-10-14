@@ -209,6 +209,63 @@ This rule corrects the formatting of type definitions.
 
   Whether to format proxied type forms like `proxy`.
 
+### `:alignment`
+
+This rule aligns values in maps and binding forms for improved readability.
+
+* `:maps?`
+
+  Whether to left-align values in map literals. When enabled, map values will
+  be aligned to the longest key in each group (groups are separated by blank
+  lines).
+
+  ```clojure
+  ;; Before (maps? false)
+  {:foo 1
+   :barbaz 2}
+
+  ;; After (maps? true)
+  {:foo    1
+   :barbaz 2}
+  ```
+
+* `:forms?`
+
+  Whether to left-align binding vectors in configured forms. When enabled,
+  values in binding vectors will be aligned to the longest binding name in each
+  group.
+
+  ```clojure
+  ;; Before (forms? false)
+  (let [foo 1
+        barbaz 2]
+    (+ foo barbaz))
+
+  ;; After (forms? true)
+  (let [foo    1
+        barbaz 2]
+    (+ foo barbaz))
+  ```
+
+* `:aligns`
+
+  Map of form symbols to sets of child indices that should be aligned. The
+  index indicates which child of the form contains the binding vector to align.
+  For most binding forms like `let`, `for`, `doseq`, and `loop`, this is index
+  0 (the first child after the form symbol).
+
+  Default forms configured for alignment:
+  - `let`, `for`, `doseq`, `loop`, `binding`
+  - `with-open`, `with-redefs`, `with-local-vars`
+
+  Example custom configuration:
+
+  ```clojure
+  {:rules {:alignment {:forms? true
+                       :aligns {'let #{0}
+                                'my-custom-binding #{0}}}}}
+  ```
+
 ### `:namespaces`
 
 This rule corrects and standardizes the formatting of `ns` definitions.

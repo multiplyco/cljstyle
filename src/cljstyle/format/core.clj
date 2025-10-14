@@ -1,6 +1,7 @@
 (ns cljstyle.format.core
   "Core formatting logic which ties together all rules."
   (:require
+    [cljstyle.format.align :as align]
     [cljstyle.format.comment :as comment]
     [cljstyle.format.fn :as fn]
     [cljstyle.format.indent :as indent]
@@ -116,6 +117,8 @@
            type/format-types
            type/format-reifies
            type/format-proxies
+           align/align-maps
+           align/align-forms
            comment/format-comments]
           rules-config
           durations)

@@ -251,6 +251,30 @@
                    :cljstyle.config.rules.namespaces/import-break-width]))
 
 
+;; #### Rule: Alignment
+
+;; Whether to align map values.
+(s/def :cljstyle.config.rules.alignment/maps?
+  boolean?)
+
+
+;; Whether to align binding form values.
+(s/def :cljstyle.config.rules.alignment/forms?
+  boolean?)
+
+
+;; Map of form symbols to sets of child indices that should be aligned.
+(s/def :cljstyle.config.rules.alignment/aligns
+  (s/map-of symbol? (s/coll-of nat-int? :kind set?)))
+
+
+(s/def :cljstyle.config.rules/alignment
+  (s/keys :opt-un [:cljstyle.config.rules.global/enabled?
+                   :cljstyle.config.rules.alignment/maps?
+                   :cljstyle.config.rules.alignment/forms?
+                   :cljstyle.config.rules.alignment/aligns]))
+
+
 ;; #### Rules Map
 
 (s/def ::rules
@@ -261,6 +285,7 @@
                    :cljstyle.config.rules/vars
                    :cljstyle.config.rules/functions
                    :cljstyle.config.rules/types
+                   :cljstyle.config.rules/alignment
                    :cljstyle.config.rules/namespaces]))
 
 
@@ -287,6 +312,11 @@
 (def default-indents
   "Default indentation rules included with the library."
   (read-file (io/resource "cljstyle/indents.clj")))
+
+
+(def default-aligns
+  "Default alignment rules included with the library."
+  (read-file (io/resource "cljstyle/aligns.clj")))
 
 
 (def legacy-config
@@ -360,6 +390,12 @@
      :protocols? true
      :reifies? true
      :proxies? true}
+
+    :alignment
+    {:enabled? true
+     :maps? false
+     :forms? false
+     :aligns default-aligns}
 
     :namespaces
     {:enabled? true

@@ -12,4 +12,9 @@
   :indentation
   {:indents
    {thrown-with-data? [[:block 1]]
-    with-options [[:block 1]]}}}}
+    with-options [[:block 1]]}}
+
+  :alignment
+  {:enabled? true
+   :maps? true
+   :forms? true}}}
