@@ -37,7 +37,7 @@
   "Remove compiled artifacts."
   [opts]
   (b/delete {:path "target"})
-  ;; TODO: clean up old poms?
+  (b/delete {:path "pom.xml"})
   opts)
 
 
